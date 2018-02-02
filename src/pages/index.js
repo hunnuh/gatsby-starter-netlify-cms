@@ -18,11 +18,13 @@ class IndexPage extends React.Component {
     window.netlifyIdentity.init();
   }
 
+
+
   render() {
     const { data } = this.props;
     const { edges: posts } = data.allMarkdownRemark;
-    const postid = this.props.allPostsQuery.allPosts ? this.props.allPostsQuery : null
-    console.log(this.props.allPostsQuery.allPosts)
+    const postid = typeof this.props.allPostsQuery !== undefined ? this.props.allPostsQuery : null
+    //console.log(this.props.allPostsQuery.allPosts)
 
     return (
       <section className="section">
@@ -76,14 +78,16 @@ const ALL_POSTS_QUERY = gql`
   }
 `
 
-const IndexPageWithQuery = graphql(ALL_POSTS_QUERY, {
-  name: 'allPostsQuery',
-  options: {
-    fetchPolicy: 'network-only',
-  },
-})(IndexPage)
+// const IndexPageWithQuery = graphql(ALL_POSTS_QUERY, {
+//   name: 'allPostsQuery',
+//   options: {
+//     fetchPolicy: 'network-only',
+//   },
+// })(IndexPage)
+//
+// export default IndexPageWithQuery
 
-export default IndexPageWithQuery
+export default IndexPage
 
 export const pageQuery = graphql`
   query IndexQuery {
