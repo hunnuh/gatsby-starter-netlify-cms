@@ -49,11 +49,11 @@ exports.replaceRenderer = ({
     resolve();
     // getDataFromTree walks ApolloQueries tree for all Apollo GQL queries
     // It runs the queries and mutates client object
-    // getDataFromTree(ApolloQueries).then(() => {
-    //   // renders ApolloQueries to string and then inserts it into the page
-    //   replaceBodyHTMLString(renderToString(ApolloQueries))
-    //   // sets head components with styled components and apollo state
-    //   setHeadComponents([makeApolloState(client)])
-    //   resolve();
-    // })
+    getDataFromTree(ApolloQueries).then(() => {
+      // renders ApolloQueries to string and then inserts it into the page
+      replaceBodyHTMLString(renderToString(ApolloQueries))
+      // sets head components with styled components and apollo state
+      setHeadComponents([makeApolloState(client)])
+      resolve();
+    })
   })
