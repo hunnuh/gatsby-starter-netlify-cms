@@ -21,7 +21,9 @@ class IndexPage extends React.Component {
   render() {
     const { data } = this.props;
     const { edges: posts } = data.allMarkdownRemark;
-    const post = this.props.allPostsQuery.allPosts[0].id
+    const postid = this.props.allPostsQuery.allPosts ? this.props.allPostsQuery : null
+    console.log(this.props.allPostsQuery.allPosts)
+
     return (
       <section className="section">
         <Script
@@ -29,7 +31,7 @@ class IndexPage extends React.Component {
           onLoad={() => this.handleScriptLoad()}
         />
         <div className="container">
-          <div>{post}</div>
+          <div>{postid ? `${postid.allPosts[0].id}` : "Loading..." }</div>
           <div className="content">
             <h1 className="has-text-weight-bold is-size-2">Latest Stories</h1>
           </div>
