@@ -4,7 +4,7 @@ import ApolloClient, { createNetworkInterface } from "apollo-client";
 import { ApolloProvider, getDataFromTree } from "react-apollo";
 import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import fetch from 'node-fetch';
+import fetch from 'isomorphic-fetch';
 
 // function to generate hydrated state for client side Apollo
 function makeApolloState(ssrClient) {
