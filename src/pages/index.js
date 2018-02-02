@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "gatsby-link";
 import Script from "react-load-script";
-import graphql from "graphql";
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
-export default class IndexPage extends React.Component {
+class IndexPage extends React.Component {
   handleScriptLoad() {
     if (typeof window !== `undefined` && window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
@@ -20,7 +21,7 @@ export default class IndexPage extends React.Component {
   render() {
     const { data } = this.props;
     const { edges: posts } = data.allMarkdownRemark;
-
+    const post = this.props.allPostsQuery.allPosts[0].id
     return (
       <section className="section">
         <Script
@@ -28,6 +29,7 @@ export default class IndexPage extends React.Component {
           onLoad={() => this.handleScriptLoad()}
         />
         <div className="container">
+          <div>{post}</div>
           <div className="content">
             <h1 className="has-text-weight-bold is-size-2">Latest Stories</h1>
           </div>
@@ -61,6 +63,25 @@ export default class IndexPage extends React.Component {
     );
   }
 }
+
+const ALL_POSTS_QUERY = gql`
+  query AllPostsQuery {
+    allPosts(orderBy: createdAt_DESC) {
+      id
+      imageUrl
+      description
+    }
+  }
+`
+
+const IndexPageWithQuery = graphql(ALL_POSTS_QUERY, {
+  name: 'allPostsQuery',
+  options: {
+    fetchPolicy: 'network-only',
+  },
+})(IndexPage)
+
+export default IndexPageWithQuery
 
 export const pageQuery = graphql`
   query IndexQuery {
