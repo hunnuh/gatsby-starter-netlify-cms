@@ -38,12 +38,6 @@ exports.replaceRenderer = ({
 }) =>
   new Promise((resolve) => {
     // bodyComponent is the entire React component tree for the page
-    /*
-      to remove styled components:
-      1. remove const sheet
-      2. remove StyleSheetManager
-      3. remove sheet.getStyleElement from setHeadComponents array
-    */
 
     const ApolloQueries = (
       <ApolloProvider client={client}>
@@ -52,13 +46,14 @@ exports.replaceRenderer = ({
 
       </ApolloProvider>
     );
+    resolve();
     // getDataFromTree walks ApolloQueries tree for all Apollo GQL queries
     // It runs the queries and mutates client object
-    getDataFromTree(ApolloQueries).then(() => {
-      // renders ApolloQueries to string and then inserts it into the page
-      replaceBodyHTMLString(renderToString(ApolloQueries))
-      // sets head components with styled components and apollo state
-      setHeadComponents([makeApolloState(client)])
-      resolve();
-    })
+    // getDataFromTree(ApolloQueries).then(() => {
+    //   // renders ApolloQueries to string and then inserts it into the page
+    //   replaceBodyHTMLString(renderToString(ApolloQueries))
+    //   // sets head components with styled components and apollo state
+    //   setHeadComponents([makeApolloState(client)])
+    //   resolve();
+    // })
   })
