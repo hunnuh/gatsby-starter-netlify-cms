@@ -20,6 +20,10 @@ class IndexPage extends React.Component {
     window.netlifyIdentity.init();
   }
 
+  componentDidMount(){
+    this.props.allPostsQuery.refetch()
+  }
+
 
 
   render() {
