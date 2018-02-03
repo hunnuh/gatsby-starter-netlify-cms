@@ -25,7 +25,6 @@ class IndexPage extends React.Component {
   render() {
     const { data } = this.props;
     const { edges: posts } = data.allMarkdownRemark;
-    console.log(this.props.allPostsQuery.allPosts)
     let queryreturn = this.props.allPostsQuery.allPosts
     return (
       <section className="section">
