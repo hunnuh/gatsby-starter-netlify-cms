@@ -4,6 +4,8 @@ import Script from "react-load-script";
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
+
+
 class IndexPage extends React.Component {
   handleScriptLoad() {
     if (typeof window !== `undefined` && window.netlifyIdentity) {
@@ -23,9 +25,8 @@ class IndexPage extends React.Component {
   render() {
     const { data } = this.props;
     const { edges: posts } = data.allMarkdownRemark;
-    const postid = typeof this.props.allPostsQuery !== undefined ? this.props.allPostsQuery : null
-    //console.log(this.props.allPostsQuery.allPosts)
-
+    console.log(this.props.allPostsQuery.allPosts)
+    let queryreturn = this.props.allPostsQuery.allPosts
     return (
       <section className="section">
         <Script
@@ -33,7 +34,7 @@ class IndexPage extends React.Component {
           onLoad={() => this.handleScriptLoad()}
         />
         <div className="container">
-          <div>{postid ? `${postid.allPosts[0].id}` : "Loading..." }</div>
+          <div>{queryreturn ? `${queryreturn[0].id}` : "Loading..." }</div>
           <div className="content">
             <h1 className="has-text-weight-bold is-size-2">Latest Stories</h1>
           </div>
@@ -68,26 +69,38 @@ class IndexPage extends React.Component {
   }
 }
 
-const ALL_POSTS_QUERY = gql`
-  query AllPostsQuery {
-    allPosts(orderBy: createdAt_DESC) {
-      id
-      imageUrl
-      description
+
+
+let exportedIndexPage;
+
+if (window === undefined) {
+  exportedIndexPage = IndexPage;
+}
+else {
+  const ALL_POSTS_QUERY = gql`
+    query AllPostsQuery {
+      allPosts(orderBy: createdAt_DESC) {
+        id
+        imageUrl
+        description
+      }
     }
-  }
-`
+  `
+  const IndexPageWithQuery = graphql(ALL_POSTS_QUERY, {
+    name: 'allPostsQuery',
+    options: {
+      fetchPolicy: 'network-only',
+    },
+  })(IndexPage)
 
-// const IndexPageWithQuery = graphql(ALL_POSTS_QUERY, {
-//   name: 'allPostsQuery',
-//   options: {
-//     fetchPolicy: 'network-only',
-//   },
-// })(IndexPage)
-//
-// export default IndexPageWithQuery
+  exportedIndexPage = IndexPageWithQuery;
+}
 
-export default IndexPage
+
+export default exportedIndexPage;
+
+
+
 
 export const pageQuery = graphql`
   query IndexQuery {
