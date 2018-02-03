@@ -73,7 +73,7 @@ class IndexPage extends React.Component {
 
 let exportedIndexPage;
 
-if (window === undefined) {
+if (!window) {
   exportedIndexPage = IndexPage;
 }
 else {
