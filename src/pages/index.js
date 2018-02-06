@@ -4,6 +4,7 @@ import Script from "react-load-script";
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
+import styles from "./index.module.css";
 
 
 class IndexPage extends React.Component {
@@ -28,48 +29,30 @@ class IndexPage extends React.Component {
 
   render() {
     const { data } = this.props;
-    const { edges: posts } = data.allMarkdownRemark;
     let queryreturn = false;
     if (typeof(window) !== 'undefined') {
       queryreturn = this.props.allPostsQuery.allPosts ? this.props.allPostsQuery.allPosts : null
     }
     return (
-      <section className="section">
+      <section className="dib w-100">
         <Script
           url="https://identity.netlify.com/v1/netlify-identity-widget.js"
           onLoad={() => this.handleScriptLoad()}
         />
-        <div className="container">
-          <div>{queryreturn ? `${queryreturn[0].id}` : "Loading..." }</div>
-          <div className="content">
-            <h1 className="has-text-weight-bold is-size-2">Latest Stories</h1>
+        <div className="cover bg-left bg-top-l bg-green dib w-100 flex flex-column justify-center" style={{backgroundImage: `url("../img/wdch_bg.jpg")`}}>
+          <div className="w-50-l center pb5 pb6-m pb1-l dib">
+            <div className="tc-l mt4 mt5-m mt6-l ph3">
+              <h1 className= {`f4 f3-l fw2 white-90 mb0 lh-title ${styles.headline}`}>Search Thousands of Union Friendly businesses, products, and services.</h1>
+              <div className="bg-navy br3 h4 mv3"/>
+            </div>
           </div>
-          {posts
-            .filter(post => post.node.frontmatter.templateKey === "blog-post")
-            .map(({ node: post }) => (
-              <div
-                className="content"
-                style={{ border: "1px solid #eaecee", padding: "2em 4em" }}
-                key={post.id}
-              >
-                <p>
-                  <Link className="has-text-primary" to={post.frontmatter.path}>
-                    {post.frontmatter.title}
-                  </Link>
-                  <span> &bull; </span>
-                  <small>{post.frontmatter.date}</small>
-                </p>
-                <p>
-                  {post.excerpt}
-                  <br />
-                  <br />
-                  <Link className="button is-small" to={post.frontmatter.path}>
-                    Keep Reading →
-                  </Link>
-                </p>
-              </div>
-            ))}
         </div>
+        <div>{queryreturn ? `${queryreturn[0].id}` : "Loading..." }</div>
+          <div className="content">
+            <h1 className="has-text-weight-bold is-size-2 bg-red">Latest Stories</h1>
+          </div>
+
+
       </section>
     );
   }
@@ -104,25 +87,3 @@ else {
 
 
 export default exportedIndexPage;
-
-
-
-
-export const pageQuery = graphql`
-  query IndexQuery {
-    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
-      edges {
-        node {
-          excerpt(pruneLength: 400)
-          id
-          frontmatter {
-            title
-            templateKey
-            date(formatString: "MMMM DD, YYYY")
-            path
-          }
-        }
-      }
-    }
-  }
-`;
