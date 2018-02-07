@@ -39,11 +39,11 @@ class IndexPage extends React.Component {
           url="https://identity.netlify.com/v1/netlify-identity-widget.js"
           onLoad={() => this.handleScriptLoad()}
         />
-        <div className="cover bg-left bg-top-l bg-green dib w-100 flex flex-column justify-center" style={{backgroundImage: `url("../img/wdch_bg.jpg")`}}>
-          <div className="w-50-l center pb5 pb6-m pb1-l dib">
-            <div className="tc-l mt4 mt5-m mt6-l ph3">
+        <div className="cover bg-left bg-center-l bg-navy dib w-100 flex flex-column justify-center" style={{backgroundImage: `url("../img/wdch_bg.jpg")`}}>
+          <div className="w-50-l center pb5 pb6-m pb5-l dib">
+            <div className="tc-l mt5 ph3">
               <h1 className= {`f4 f3-l fw2 white-90 mb0 lh-title ${styles.headline}`}>Search Thousands of Union Friendly businesses, products, and services.</h1>
-              <div className="bg-navy br3 h4 mv3"/>
+              <div className="bg-navy br3 h3 mv3"/>
             </div>
           </div>
         </div>
