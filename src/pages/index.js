@@ -5,7 +5,7 @@ import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import styles from "./index.module.css";
-
+import Autosearch from '../components/Autosearch';
 
 class IndexPage extends React.Component {
   handleScriptLoad() {
@@ -42,8 +42,10 @@ class IndexPage extends React.Component {
         <div className="cover bg-left bg-center-l bg-navy dib w-100 flex flex-column justify-center" style={{backgroundImage: `url("../img/wdch_bg.jpg")`}}>
           <div className="w-50-l center pb5 pb6-m pb5-l dib">
             <div className="tc-l mt5 ph3">
-              <h1 className= {`f4 f3-l fw2 white-90 mb0 lh-title ${styles.headline}`}>Search Thousands of Union Friendly businesses, products, and services.</h1>
-              <div className="bg-navy br3 h3 mv3"/>
+              <h1 className= {`f4 f3-l fw2 white-90 mb0 lh-title ${styles.headline}`}>
+                Search Thousands of Union Friendly businesses, products, and services.
+              </h1>
+                <Autosearch/>
             </div>
           </div>
         </div>
