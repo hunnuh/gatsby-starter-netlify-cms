@@ -24,6 +24,9 @@ var userData = {
 };
 var cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
 
+var dynamodb;
+var docClient;
+
 cognitoUser.authenticateUser(authenticationDetails, {
    onSuccess: function (result) {
        console.log('access token + ' + result.getAccessToken().getJwtToken());
@@ -47,6 +50,9 @@ cognitoUser.authenticateUser(authenticationDetails, {
                 // Instantiate aws sdk service objects now that the credentials have been updated.
                 // example: var s3 = new AWS.S3();
                 console.log('Successfully logged!');
+                console.log(AWS.config);
+                dynamodb = new AWS.DynamoDB({ region: 'us-west-2' });
+                docClient = new AWS.DynamoDB.DocumentClient({ service: dynamodb });
            }
        });
    },
@@ -58,19 +64,19 @@ cognitoUser.authenticateUser(authenticationDetails, {
 });
 
 
-var docClient = new AWS.DynamoDB.DocumentClient();
-
 function processFile(evt) {
     document.getElementById('textarea').innerHTML = "";
     document.getElementById('textarea').innerHTML += "Importing movies into DynamoDB. Please wait..." + "\n";
     var file = evt.target.files[0];
     if (file) {
+        console.log("file exists")
         var r = new FileReader();
         r.onload = function(e) {
             var contents = e.target.result;
             var allMovies = JSON.parse(contents);
 
             allMovies.forEach(function (movie) {
+              console.log(movie)
                 document.getElementById('textarea').innerHTML += "Processing: " + movie.title + "\n";
                 var params = {
                     TableName: "Movies",
@@ -82,7 +88,7 @@ function processFile(evt) {
                 };
                 docClient.put(params, function (err, data) {
                     if (err) {
-                        document.getElementById('textarea').innerHTML += "Unable to add movie: " + count + movie.title + "\n";
+                        document.getElementById('textarea').innerHTML += "Unable to add movie: " + movie.title + "\n";
                         document.getElementById('textarea').innerHTML += "Error JSON: " + JSON.stringify(err) + "\n";
                     } else {
                         document.getElementById('textarea').innerHTML += "PutItem succeeded: " + movie.title + "\n";
