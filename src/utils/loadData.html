@@ -1,0 +1,112 @@
+<html>
+<head>
+<script src="./aws-cognito-sdk.min.js"></script>
+<script src="./amazon-cognito-identity.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+
+<script type="text/javascript">
+
+
+
+var authenticationData = {
+   Username : 'Hunter',
+   Password : 'thisIsTheNewPass!1',
+};
+var authenticationDetails = new AWSCognito.CognitoIdentityServiceProvider.AuthenticationDetails(authenticationData);
+var poolData = {
+   UserPoolId : 'us-west-2_jhun7IAIz', // Your user pool id here
+   ClientId : 'h8v8qbsq6uedqjgvaspfeb6s4' // Your client id here
+};
+var userPool = new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
+var userData = {
+   Username : 'Hunter',
+   Pool : userPool
+};
+var cognitoUser = new AWSCognito.CognitoIdentityServiceProvider.CognitoUser(userData);
+
+cognitoUser.authenticateUser(authenticationDetails, {
+   onSuccess: function (result) {
+       console.log('access token + ' + result.getAccessToken().getJwtToken());
+
+       //POTENTIAL: Region needs to be set if not already set previously elsewhere.
+       AWS.config.region = 'us-west-2';
+
+       AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+           IdentityPoolId : 'us-west-2:2550c09b-9984-4a1a-b609-508b5f5bde2e', // your identity pool id here
+           Logins : {
+               // Change the key below according to the specific region your user pool is in.
+               'cognito-idp.us-west-2.amazonaws.com/us-west-2_jhun7IAIz' : result.getIdToken().getJwtToken()
+           }
+       });
+
+       //refreshes credentials using AWS.CognitoIdentity.getCredentialsForIdentity()
+       AWS.config.credentials.refresh((error) => {
+           if (error) {
+                console.error(error);
+           } else {
+                // Instantiate aws sdk service objects now that the credentials have been updated.
+                // example: var s3 = new AWS.S3();
+                console.log('Successfully logged!');
+           }
+       });
+   },
+
+   onFailure: function(err) {
+       alert(err);
+   },
+
+});
+
+
+var docClient = new AWS.DynamoDB.DocumentClient();
+
+function processFile(evt) {
+    document.getElementById('textarea').innerHTML = "";
+    document.getElementById('textarea').innerHTML += "Importing movies into DynamoDB. Please wait..." + "\n";
+    var file = evt.target.files[0];
+    if (file) {
+        var r = new FileReader();
+        r.onload = function(e) {
+            var contents = e.target.result;
+            var allMovies = JSON.parse(contents);
+
+            allMovies.forEach(function (movie) {
+                document.getElementById('textarea').innerHTML += "Processing: " + movie.title + "\n";
+                var params = {
+                    TableName: "Movies",
+                    Item: {
+                        "year": movie.year,
+                        "title": movie.title,
+                        "info": movie.info
+                    }
+                };
+                docClient.put(params, function (err, data) {
+                    if (err) {
+                        document.getElementById('textarea').innerHTML += "Unable to add movie: " + count + movie.title + "\n";
+                        document.getElementById('textarea').innerHTML += "Error JSON: " + JSON.stringify(err) + "\n";
+                    } else {
+                        document.getElementById('textarea').innerHTML += "PutItem succeeded: " + movie.title + "\n";
+                        textarea.scrollTop = textarea.scrollHeight;
+                    }
+                });
+            });
+    };
+        r.readAsText(file);
+    } else {
+        alert("Could not read movie data file");
+    }
+}
+
+</script>
+</head>
+
+<body>
+<input type="file" id="fileinput" accept='application/json'/>
+<br><br>
+<textarea readonly id= "textarea" style="width:400px; height:800px"></textarea>
+
+<script>
+    document.getElementById('fileinput').addEventListener('change', processFile, false);
+</script>
+</body>
+</html>
