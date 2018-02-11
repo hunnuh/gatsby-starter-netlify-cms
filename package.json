@@ -4,21 +4,37 @@
   "version": "1.1.0",
   "author": "Austin Green",
   "dependencies": {
+    "apollo-client-preset": "^1.0.6",
+    "aws-sdk": "^2.190.0",
     "bulma": "^0.6.0",
-    "gatsby": "^1.9.63",
+    "gatsby": "^1.9.178",
     "gatsby-link": "^1.6.21",
     "gatsby-plugin-netlify-cms": "^1.0.2",
     "gatsby-plugin-react-helmet": "^1.0.5",
     "gatsby-plugin-sass": "^1.0.12",
     "gatsby-plugin-sharp": "^1.6.18",
+    "gatsby-plugin-typography": "^1.7.13",
     "gatsby-remark-images": "^1.5.18",
     "gatsby-source-filesystem": "^1.5.5",
     "gatsby-transformer-remark": "^1.7.17",
     "gatsby-transformer-sharp": "^1.6.13",
+    "graphql-tag": "^2.6.1",
+    "immutable": "^3.8.2",
+    "minireset.css": "0.0.3",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
+    "react-apollo": "1.4",
+    "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
-    "react-load-script": "0.0.6"
+    "react-load-script": "0.0.6",
+    "react-router": "^4.2.0",
+    "slate": "^0.32.2",
+    "styled-components": "^3.1.5",
+    "tachyons": "^4.9.1",
+    "typography-theme-fairy-gates": "^0.15.11"
+  },
+  "peerDependencies": {
+    "graphql": "^0.12.3"
   },
   "keywords": [
     "gatsby"
